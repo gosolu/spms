@@ -183,6 +183,10 @@ skipped entirely when nobody is waiting.
 
 ## Development
 
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs the same gates as
+`make check` on every push and pull request: `gofmt`, `go vet`, `golangci-lint`,
+and `go test -race`.
+
 ```bash
 make check   # fmt, vet, golangci-lint, go test -race
 make cover   # coverage report
