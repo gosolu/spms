@@ -1,0 +1,67 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+  allow-parallel-runners: true
+
+linters:
+  default: none
+  enable:
+    # Correctness and bug detection.
+    - errcheck
+    - govet
+    - ineffassign
+    - nilerr
+    - staticcheck
+    - unused
+    - errorlint
+    - gosec
+    # Style and clarity.
+    - gocritic
+    - misspell
+    - revive
+    - unconvert
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+        - name: package-comments
+        - name: error-naming
+        - name: error-strings
+        - name: error-return
+        - name: var-naming
+  exclusions:
+    generated: lax
+    rules:
+      # Test names follow the testing package convention rather than the GoDoc
+      # convention revive enforces for exported identifiers.
+      - path: _test\.go
+        linters:
+          - revive
+
+formatters:
+  enable:
+    - gofmt
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

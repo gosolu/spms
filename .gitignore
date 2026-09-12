@@ -1,0 +1,12 @@
+# Coverage and profiling artifacts
+coverage.out
+*.coverprofile
+*.prof
+
+# Build output
+/bin/
+
+# Editor and OS noise
+.DS_Store
+.idea/
+.vscode/
