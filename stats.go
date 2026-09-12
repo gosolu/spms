@@ -1,4 +1,4 @@
-package spms
+package spmc
 
 // Stats is a point-in-time view of a buffer's counters.
 //

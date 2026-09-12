@@ -1,4 +1,4 @@
-package spms
+package spmc
 
 import (
 	"context"
@@ -22,7 +22,7 @@ import (
 //
 // Example:
 //
-//	q := spms.New[Job](spms.WithCapacity(64))
+//	q := spmc.New[Job](spmc.WithCapacity(64))
 //	var wg sync.WaitGroup
 //	for range runtime.GOMAXPROCS(0) {
 //		wg.Add(1)

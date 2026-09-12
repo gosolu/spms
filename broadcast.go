@@ -1,4 +1,4 @@
-package spms
+package spmc
 
 import (
 	"context"
@@ -96,7 +96,7 @@ func (b *Broadcaster[T]) Publish(ctx context.Context, item T) error {
 			continue
 		}
 		if !errors.Is(err, ErrClosed) {
-			return fmt.Errorf("spms: publish to subscription %d: %w", sub.id, err)
+			return fmt.Errorf("spmc: publish to subscription %d: %w", sub.id, err)
 		}
 		// The subscription unregistered itself while this item was in flight, or
 		// the broadcaster is shutting down; only the latter affects the caller.

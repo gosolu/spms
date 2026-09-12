@@ -1,4 +1,4 @@
-package spms
+package spmc
 
 import "fmt"
 
@@ -48,8 +48,8 @@ func (o Overflow) String() string {
 // The same option set applies to all three so that a subscription inherits the
 // broadcaster's defaults and only overrides what it needs:
 //
-//	b := spms.NewBroadcaster[Event](spms.WithCapacity(1024))
-//	lossy := b.Subscribe(spms.WithCapacity(8), spms.WithOverflow(spms.OverflowDropNewest))
+//	b := spmc.NewBroadcaster[Event](spmc.WithCapacity(1024))
+//	lossy := b.Subscribe(spmc.WithCapacity(8), spmc.WithOverflow(spmc.OverflowDropNewest))
 type Option func(*config)
 
 // config holds the resolved settings shared by every buffer in the package.
@@ -71,10 +71,10 @@ func newConfig(opts []Option, base config) config {
 		}
 	}
 	if cfg.capacity < 0 {
-		panic(fmt.Sprintf("spms: negative capacity %d", cfg.capacity))
+		panic(fmt.Sprintf("spmc: negative capacity %d", cfg.capacity))
 	}
 	if cfg.overflow < OverflowBlock || cfg.overflow > OverflowError {
-		panic(fmt.Sprintf("spms: invalid overflow policy %d", int(cfg.overflow)))
+		panic(fmt.Sprintf("spmc: invalid overflow policy %d", int(cfg.overflow)))
 	}
 	return cfg
 }

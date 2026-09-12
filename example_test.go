@@ -1,4 +1,4 @@
-package spms_test
+package spmc_test
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/gosolu/spms"
+	"github.com/gosolu/spmc"
 )
 
 // ExampleQueue shows the work-distribution shape: one producer, one consumer, and
@@ -17,7 +17,7 @@ func ExampleQueue() {
 	// The capacity gives the producer room to run the whole batch ahead of the
 	// consumer; with the default unbuffered queue each Publish would wait for a
 	// matching Next.
-	queue := spms.New[int](spms.WithCapacity(3))
+	queue := spmc.New[int](spmc.WithCapacity(3))
 
 	for job := 1; job <= 3; job++ {
 		if err := queue.Publish(ctx, job); err != nil {
@@ -29,7 +29,7 @@ func ExampleQueue() {
 	for {
 		job, err := queue.Next(ctx)
 		if err != nil {
-			break // spms.ErrClosed: the producer is done and the queue is drained.
+			break // spmc.ErrClosed: the producer is done and the queue is drained.
 		}
 		fmt.Println("processed", job)
 	}
@@ -44,7 +44,7 @@ func ExampleQueue() {
 // every job is processed exactly once, and the order of completion varies.
 func ExampleQueue_multipleConsumers() {
 	ctx := context.Background()
-	queue := spms.New[int](spms.WithCapacity(4))
+	queue := spmc.New[int](spmc.WithCapacity(4))
 
 	var (
 		mu       sync.Mutex
@@ -82,7 +82,7 @@ func ExampleQueue_multipleConsumers() {
 // producer closes the queue and the last item has been consumed.
 func ExampleQueue_Items() {
 	ctx := context.Background()
-	queue := spms.New[string](spms.WithCapacity(1))
+	queue := spmc.New[string](spmc.WithCapacity(1))
 
 	go func() {
 		for _, value := range []string{"a", "b", "c"} {
@@ -109,7 +109,7 @@ func ExampleBroadcaster() {
 	ctx := context.Background()
 	// Each subscription gets room for the whole batch, so the producer never has to
 	// wait for a consumer to catch up.
-	broadcaster := spms.NewBroadcaster[int](spms.WithCapacity(3))
+	broadcaster := spmc.NewBroadcaster[int](spmc.WithCapacity(3))
 
 	first := broadcaster.Subscribe()
 	second := broadcaster.Subscribe()
@@ -140,7 +140,7 @@ func ExampleBroadcaster() {
 // ExampleQueue_TryPublish sheds load instead of stalling the producer, which is
 // what a latency-sensitive publisher wants once consumers fall behind.
 func ExampleQueue_TryPublish() {
-	queue := spms.New[int](spms.WithCapacity(1))
+	queue := spmc.New[int](spmc.WithCapacity(1))
 
 	fmt.Println(queue.TryPublish(1))
 	fmt.Println(queue.TryPublish(2))
@@ -148,6 +148,6 @@ func ExampleQueue_TryPublish() {
 
 	// Output:
 	// <nil>
-	// spms: buffer full
+	// spmc: buffer full
 	// buffered: 1 dropped: 0
 }

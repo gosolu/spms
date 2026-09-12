@@ -1,4 +1,4 @@
-package spms
+package spmc
 
 import (
 	"context"

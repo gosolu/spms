@@ -1,4 +1,4 @@
-# spms
+# spmc
 
 Single-producer/multiple-consumer (SPMC) primitives for Go: one producer hands work
 to many consumers, with bounded buffers, explicit back pressure, and a graceful
@@ -19,10 +19,10 @@ Two shapes of SPMC communication are supported:
 ## Install
 
 ```bash
-go get github.com/gosolu/spms
+go get github.com/gosolu/spmc
 ```
 
-The module path is `github.com/gosolu/spms`; adjust the `module` line in `go.mod`
+The module path is `github.com/gosolu/spmc`; adjust the `module` line in `go.mod`
 if you fork it under a different repository.
 
 ## Work distribution
@@ -31,7 +31,7 @@ One producer, N consumers, each item processed once:
 
 ```go
 ctx := context.Background()
-queue := spms.New[Job](spms.WithCapacity(64))
+queue := spmc.New[Job](spmc.WithCapacity(64))
 
 var workers sync.WaitGroup
 for range runtime.GOMAXPROCS(0) {
@@ -60,7 +60,7 @@ cancellation:
 for {
 	job, err := queue.Next(ctx)
 	if err != nil {
-		if errors.Is(err, spms.ErrClosed) {
+		if errors.Is(err, spmc.ErrClosed) {
 			return nil // the producer finished and the queue is drained
 		}
 		return err // ctx.Err()
@@ -74,13 +74,13 @@ for {
 One producer, N independent consumers that each see every item:
 
 ```go
-broadcaster := spms.NewBroadcaster[Event](spms.WithCapacity(256))
+broadcaster := spmc.NewBroadcaster[Event](spmc.WithCapacity(256))
 
 // One subscription per consumer, each with its own backlog.
 fast := broadcaster.Subscribe()
 lossy := broadcaster.Subscribe(
-	spms.WithCapacity(8),
-	spms.WithOverflow(spms.OverflowDropNewest),
+	spmc.WithCapacity(8),
+	spmc.WithOverflow(spmc.OverflowDropNewest),
 )
 
 go func() {
