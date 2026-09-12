@@ -1,5 +1,7 @@
 # spmc
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/gosolu/spmc.svg)](https://pkg.go.dev/github.com/gosolu/spmc)
+
 Single-producer/multiple-consumer (SPMC) primitives for Go: one producer hands work
 to many consumers, with bounded buffers, explicit back pressure, and a graceful
 shutdown.
